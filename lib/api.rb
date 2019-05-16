@@ -5,7 +5,7 @@ class VenturaRestaurants::API
         binding.pry
         restaurants = resp["businesses"]
 
-        Yelp
+        
     end
-
+    VenturaRestaurants::Restaurant.new_from_collection(restaurants)
 end
