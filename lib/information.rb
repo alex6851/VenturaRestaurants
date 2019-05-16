@@ -1,0 +1,2 @@
+class VenturaRestaurants::Information
+end
