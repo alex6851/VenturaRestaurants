@@ -13,6 +13,6 @@ require "dotenv/load"
 
 require_relative "./cli.rb"
 require_relative "./api"
-require_relative "./information"
+require_relative "./Restaurant"
 require_relative "./VenturaRestaurants/version"
 
