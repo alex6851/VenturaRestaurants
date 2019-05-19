@@ -12,14 +12,14 @@ class VenturaRestaurants::CLI
     @@reset = "\u001b[0m"
 
 
-    attr_accessor :display_restaurants
+    
     def start
         @input = ""
         puts "#{@@green}#{@@reversed}Welcome to the Restaurants of Ventura App.#{@@reset}"
         puts ""
         puts ""
         VenturaRestaurants::API.get_restaurants
-
+        binding.pry
 
         while @input != "N"
             puts "#{@@green}#{@@reversed}Type 'genre' to view Restaurants by genre and type 'all' to view all the restaurants!#{@@reset}"
@@ -33,6 +33,7 @@ class VenturaRestaurants::CLI
                 list_restaurants_in_category
                 puts "#{@@green}#{@@reversed}Select the number of the Restaurant OR type 'all' OR type 'back' to go back to the top#{@@reset}"
                 get_user_input
+                binding.pry
                 if @input == "all"
                     select_all_restaurants_in_category          
                 elsif @input != "back"
@@ -102,7 +103,7 @@ class VenturaRestaurants::CLI
     end
 
     def select_restaurant_by_category
-       restaurant = @display_restaurants_by_category[@input]
+       @restaurant = @display_restaurants_by_category[@input]
        puts ""
        puts "    #{@@yellow}#{@@reversed}#{restaurant.name}#{@@reset}"
        puts ""
@@ -114,6 +115,19 @@ class VenturaRestaurants::CLI
        puts "#{@@blue}Is Closed?: #{@@cyan}#{restaurant.is_closed}"
        puts ""
     end
+
+    # def list_restaurant_details
+    #     puts ""
+    #     puts "    #{@@yellow}#{@@reversed}#{@restaurant.name}#{@@reset}"
+    #     puts ""
+    #     puts "#{@@blue}Phone: #{@@cyan}#{@restaurant.display_phone}"
+    #     puts "#{@@blue}Price: #{@@cyan}#{@restaurant.price}"
+    #     puts "#{@@blue}Rating: #{@@cyan}#{@restaurant.rating}"
+    #     puts "#{@@blue}Review Count: #{@@cyan}#{@restaurant.review_count}"
+    #     puts "#{@@blue}Yelp Page: #{@@cyan}#{@restaurant.url}"
+    #     puts "#{@@blue}Is Closed?: #{@@cyan}#{@restaurant.is_closed}"
+    #     puts ""
+    # end
 
     def list_restaurants_in_category      
         @display_restaurants_by_category = []
