@@ -19,7 +19,6 @@ class VenturaRestaurants::CLI
         puts ""
         puts ""
         VenturaRestaurants::API.get_restaurants
-        binding.pry
 
         while @input != "N"
             puts "#{@@green}#{@@reversed}Type 'genre' to view Restaurants by genre and type 'all' to view all the restaurants!#{@@reset}"
@@ -27,28 +26,29 @@ class VenturaRestaurants::CLI
             
             case @input
             when "genre"
-                list_categories
+                display_categories
                 puts "#{@@green}#{@@reversed}Type in the name of the Genre(or part of the name)#{@@reset}"
                 get_user_input
-                list_restaurants_in_category
+                display_restaurants_in_category
                 puts "#{@@green}#{@@reversed}Select the number of the Restaurant OR type 'all' OR type 'back' to go back to the top#{@@reset}"
                 get_user_input
-                binding.pry
                 if @input == "all"
-                    select_all_restaurants_in_category          
+                    select_and_display_all_restaurants_in_category          
                 elsif @input != "back"
                     input_to_index
                     select_restaurant_by_category
+                    display_restaurant_details
                 end    
             when "all"
-                list_restaurants
+                display_restaurants
                 puts "#{@@green}#{@@reversed}Select the number of the Restaurant OR type 'all' OR type 'back' to go back to the top#{@@reset}"
                 get_user_input
                 if @input == "all"
-                    select_all_restaurants
+                    select_and_display_all_restaurants
                 elsif @input != "back"   
                     input_to_index 
                     select_restaurant
+                    display_restaurant_details
                 end
             end
             if @input != "back"
@@ -60,76 +60,40 @@ class VenturaRestaurants::CLI
 
     def select_all_restaurants
         VenturaRestaurants::Restaurant.all.each do |restaurant| 
-       puts ""
-       puts "    #{@@yellow}#{@@reversed}#{restaurant.name}#{@@reset}"
-       puts ""
-       puts "#{@@blue}Phone: #{@@cyan}#{restaurant.display_phone}"
-       puts "#{@@blue}Price: #{@@cyan}#{restaurant.price}"
-       puts "#{@@blue}Rating: #{@@cyan}#{restaurant.rating}"
-       puts "#{@@blue}Review Count: #{@@cyan}#{restaurant.review_count}"
-       puts "#{@@blue}Yelp Page: #{@@cyan}#{restaurant.url}"
-       puts "#{@@blue}Is Closed?: #{@@cyan}#{restaurant.is_closed}"
-       puts ""
+            @restaurant = restaurant
+            display_restaurant_details
         end
     end
 
     def select_restaurant   
-        restaurant = VenturaRestaurants::Restaurant.all[@input]
-       puts ""
-       puts "    #{@@yellow}#{@@reversed}#{restaurant.name}#{@@reset}"
-       puts ""
-       puts "#{@@blue}Phone: #{@@cyan}#{restaurant.display_phone}"
-       puts "#{@@blue}Price: #{@@cyan}#{restaurant.price}"
-       puts "#{@@blue}Rating: #{@@cyan}#{restaurant.rating}"
-       puts "#{@@blue}Review Count: #{@@cyan}#{restaurant.review_count}"
-       puts "#{@@blue}Yelp Page: #{@@cyan}#{restaurant.url}"
-       puts "#{@@blue}Is Closed?: #{@@cyan}#{restaurant.is_closed}"
-       puts ""
+        @restaurant = VenturaRestaurants::Restaurant.all[@input]
     end
 
-    def select_all_restaurants_in_category
-        @display_restaurants_by_category.each do |restaurant| 
-       puts ""
-       puts "    #{@@yellow}#{@@reversed}#{restaurant.name}#{@@reset}"
-       puts ""
-       puts "#{@@blue}Phone: #{@@cyan}#{restaurant.display_phone}"
-       puts "#{@@blue}Price: #{@@cyan}#{restaurant.price}"
-       puts "#{@@blue}Rating: #{@@cyan}#{restaurant.rating}"
-       puts "#{@@blue}Review Count: #{@@cyan}#{restaurant.review_count}"
-       puts "#{@@blue}Yelp Page: #{@@cyan}#{restaurant.url}"
-       puts "#{@@blue}Is Closed?: #{@@cyan}#{restaurant.is_closed}"
-       puts ""
+    def select_and_display_all_restaurants_in_category
+        @display_restaurants_by_category.each do |restaurant|
+            @restaurant = restaurant
+            display_restaurant_details
         end
+    end
+
+    def display_restaurant_details
+        puts ""
+        puts "    #{@@yellow}#{@@reversed}#{@restaurant.name}#{@@reset}"
+        puts ""
+        puts "#{@@blue}Phone: #{@@cyan}#{@restaurant.display_phone}"
+        puts "#{@@blue}Price: #{@@cyan}#{@restaurant.price}"
+        puts "#{@@blue}Rating: #{@@cyan}#{@restaurant.rating}"
+        puts "#{@@blue}Review Count: #{@@cyan}#{@restaurant.review_count}"
+        puts "#{@@blue}Yelp Page: #{@@cyan}#{@restaurant.url}"
+        puts "#{@@blue}Is Closed?: #{@@cyan}#{@restaurant.is_closed}"
+        puts ""
     end
 
     def select_restaurant_by_category
        @restaurant = @display_restaurants_by_category[@input]
-       puts ""
-       puts "    #{@@yellow}#{@@reversed}#{restaurant.name}#{@@reset}"
-       puts ""
-       puts "#{@@blue}Phone: #{@@cyan}#{restaurant.display_phone}"
-       puts "#{@@blue}Price: #{@@cyan}#{restaurant.price}"
-       puts "#{@@blue}Rating: #{@@cyan}#{restaurant.rating}"
-       puts "#{@@blue}Review Count: #{@@cyan}#{restaurant.review_count}"
-       puts "#{@@blue}Yelp Page: #{@@cyan}#{restaurant.url}"
-       puts "#{@@blue}Is Closed?: #{@@cyan}#{restaurant.is_closed}"
-       puts ""
     end
 
-    # def list_restaurant_details
-    #     puts ""
-    #     puts "    #{@@yellow}#{@@reversed}#{@restaurant.name}#{@@reset}"
-    #     puts ""
-    #     puts "#{@@blue}Phone: #{@@cyan}#{@restaurant.display_phone}"
-    #     puts "#{@@blue}Price: #{@@cyan}#{@restaurant.price}"
-    #     puts "#{@@blue}Rating: #{@@cyan}#{@restaurant.rating}"
-    #     puts "#{@@blue}Review Count: #{@@cyan}#{@restaurant.review_count}"
-    #     puts "#{@@blue}Yelp Page: #{@@cyan}#{@restaurant.url}"
-    #     puts "#{@@blue}Is Closed?: #{@@cyan}#{@restaurant.is_closed}"
-    #     puts ""
-    # end
-
-    def list_restaurants_in_category      
+    def display_restaurants_in_category      
         @display_restaurants_by_category = []
         VenturaRestaurants::Restaurant.all.each do |restaurant|
             @display_restaurants_by_category << restaurant if restaurant.categories[0]["title"] =~ /#{@input}/
@@ -148,7 +112,7 @@ class VenturaRestaurants::CLI
     end
 
 
-    def list_categories
+    def display_categories
         categories = []
         VenturaRestaurants::Restaurant.all.each do |restaurant|
              categories << restaurant.categories[0]["title"]
@@ -158,7 +122,7 @@ class VenturaRestaurants::CLI
         end           
     end
 
-    def list_restaurants
+    def display_restaurants
         VenturaRestaurants::Restaurant.all.each_with_index do |restaurant, index|
             puts "#{@@green}#{index + 1}. #{restaurant.name}"
         end 
