@@ -36,7 +36,7 @@ class VenturaRestaurants::CLI
                     select_and_display_all_restaurants_in_category          
                 elsif @input != "back"
                     input_to_index
-                    select_restaurant_by_category
+                    select_restaurant_in_category
                     display_restaurant_details
                 end    
             when "all"
@@ -70,7 +70,7 @@ class VenturaRestaurants::CLI
     end
 
     def select_and_display_all_restaurants_in_category
-        @restaurants_by_category.each do |restaurant|
+        @restaurants_in_category.each do |restaurant|
             @restaurant = restaurant
             display_restaurant_details
         end
