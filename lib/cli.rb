@@ -29,7 +29,7 @@ class VenturaRestaurants::CLI
                 list_categories
                 puts "#{@@green}#{@@reversed}Type in the name of the Genre(or part of the name)#{@@reset}"
                 get_user_input
-                list_restaurants_in_category
+                select_category_and_list_restaurants_in_category
                 puts "#{@@green}#{@@reversed}Select the number of the Restaurant OR type 'all' OR type 'back' to go back to the top#{@@reset}"
                 get_user_input
                 if @input == "all"
@@ -89,16 +89,16 @@ class VenturaRestaurants::CLI
         puts ""
     end
 
-    def select_restaurant_by_category
-       @restaurant = @restaurants_by_category[@input]
+    def select_restaurant_in_category
+       @restaurant = @restaurants_in_category[@input]
     end
 
-    def list_restaurants_in_category      
-        @restaurants_by_category = []
+    def select_category_and_list_restaurants_in_category      
+        @restaurants_in_category = []
         VenturaRestaurants::Restaurant.all.each do |restaurant|
-            @restaurants_by_category << restaurant if restaurant.categories[0]["title"] =~ /#{@input}/
+            @restaurants_in_category << restaurant if restaurant.categories[0]["title"] =~ /#{@input}/
             end
-            @restaurants_by_category.each_with_index do |restaurant, index|
+            @restaurants_in_category.each_with_index do |restaurant, index|
             puts "#{@@green}#{index + 1}. #{restaurant.name}"
         end           
     end
