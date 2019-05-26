@@ -5,7 +5,8 @@ class VenturaRestaurants::Restaurant
 
     def initialize(restaurant)
         restaurant_from_hash(restaurant)
-        save
+        save     
+        category_from_restaurant(restaurant)
     end
 
     def save 
@@ -29,6 +30,11 @@ class VenturaRestaurants::Restaurant
         
     end
 
+    def category_from_restaurant(restaurant)
+        self.categories.each do |category|     
+        VenturaRestaurants::Category.new(category["title"],self)
+        end
+    end
   
 
     

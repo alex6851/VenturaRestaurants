@@ -19,6 +19,7 @@ class VenturaRestaurants::CLI
         puts ""
         puts ""
         VenturaRestaurants::API.get_restaurants
+        
 
         while @input != "N"
             puts "#{@@green}#{@@reversed}Type 'genre' to view Restaurants by genre and type 'all' to view all the restaurants!#{@@reset}"
@@ -95,8 +96,8 @@ class VenturaRestaurants::CLI
 
     def select_category_and_list_restaurants_in_category      
         @restaurants_in_category = []
-        VenturaRestaurants::Restaurant.all.each do |restaurant|
-            @restaurants_in_category << restaurant if restaurant.categories[0]["title"] =~ /#{@input}/
+        VenturaRestaurants::Category.all.each do |category|
+            @restaurants_in_category << category.restaurant if category.name =~ /#{@input}/
             end
             @restaurants_in_category.each_with_index do |restaurant, index|
             puts "#{@@green}#{index + 1}. #{restaurant.name}"
@@ -114,12 +115,13 @@ class VenturaRestaurants::CLI
 
     def list_categories
         categories = []
-        VenturaRestaurants::Restaurant.all.each do |restaurant|
-             categories << restaurant.categories[0]["title"]
-            end
+        VenturaRestaurants::Category.all.each do |category|
+            categories << category.name
+        end
         categories.uniq!.each do |category|
             puts "#{@@green}#{category}"
-        end           
+        end
+          
     end
 
     def list_restaurants
