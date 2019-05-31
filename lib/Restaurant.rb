@@ -31,7 +31,7 @@ class VenturaRestaurants::Restaurant
     end
 
     def category_from_restaurant(restaurant)
-        self.categories.each do |category|     
+        self.categories.each do |category|
         VenturaRestaurants::Category.new(category["title"],self)
         end
     end
