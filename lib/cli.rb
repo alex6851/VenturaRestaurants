@@ -25,9 +25,6 @@ class VenturaRestaurants::CLI
             @restaurant = nil
             get_user_input
             validate_genre_or_all
-            if @input == "exit"
-                break
-            end
             
             case @input
             when "genre"
@@ -80,7 +77,7 @@ class VenturaRestaurants::CLI
     
 
     def validate_genre_or_all
-        while @input != "genre" && @input != "all" && @input != "exit"
+        while @input != "genre" && @input != "all"
            puts "#{GREEN}#{REVERSED}I dont understand please type genre or all#{RESET}"
            get_user_input
         end
@@ -93,7 +90,7 @@ class VenturaRestaurants::CLI
         end
     end
     def validate_restaurant
-        while @restaurant == nil && @input != "exit"
+        while @restaurant == nil
          puts "#{GREEN}#{REVERSED}Sorry about that we couldnt find your restaurant could you type it in again for me?#{RESET}"
          get_user_input
          input_to_index
@@ -127,7 +124,7 @@ class VenturaRestaurants::CLI
     def validate_restaurant_in_category
         #Here I validate if the number selected is in array.
         #The default value of @restaurant is "nil" so if you select a number thats in the @restaurants_in_category array then @restaurant will change from "nil."
-        while @restaurant == nil && @input != "exit"
+        while @restaurant == nil
             puts "#{GREEN}#{REVERSED}Sorry about that we couldnt find your restaurant could you type it in again for me?#{RESET}"
             get_user_input
             input_to_index
@@ -149,7 +146,7 @@ class VenturaRestaurants::CLI
 
     def validate_category
         #Here I validate if the number selected is in array.
-        while @input != "exit" && @categories[@input] == nil
+        while @categories[@input] == nil
             puts "#{GREEN}#{REVERSED}Sorry about that we couldnt find the category could you type it in again for me?#{RESET}"
             get_user_input
             input_to_index
@@ -173,13 +170,11 @@ class VenturaRestaurants::CLI
 
     def input_to_index
         #this is where I validate if the user input is an Integer.
-        while !(@input =~ /\d/) && !(@input =~ /\d\d/) && @input != "exit"                   
+        while !(@input =~ /\d/) && !(@input =~ /\d\d/)                   
               puts "#{GREEN}#{REVERSED}I'm sorry I didnt understand, I'm looking for a number.#{RESET}"
               get_user_input
-        end
-        if @input != "exit"
+        end      
             @input = @input.to_i - 1 
-        end
     end
 
 
