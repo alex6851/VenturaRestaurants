@@ -17,13 +17,15 @@ class VenturaRestaurants::CLI
         puts ""
         VenturaRestaurants::API.get_restaurants
         
-
+        #I changed from a while loop because I found the "loop do" loop to be more predictable.
         loop do
             puts "#{GREEN}#{REVERSED}Type 'genre' to view Restaurants by genre and type 'all' to view all the restaurants!#{RESET}"
             puts ""
             puts "#{GREEN}#{REVERSED}Or type EXIT at ANY time to end the program#{RESET}"
             @restaurant = nil
             get_user_input
+            #this allows me to break from the loop if "exit" is typed. 
+            #I tried to put this into a method so that I didnt have to type it out each time but I got "Invalid break (SyntaxError)" every time.
             if @input == "exit"
                 break
             end
@@ -43,6 +45,9 @@ class VenturaRestaurants::CLI
                 end
                 if @input != "back"
                     input_to_index
+                    if @input == "exit"
+                        break
+                    end
                     select_category
                     validate_category
                     if @input == "exit"
@@ -60,6 +65,9 @@ class VenturaRestaurants::CLI
                     select_all_restaurants_in_category_and_display_details         
                 elsif @input != "back"
                     input_to_index
+                    if @input == "exit"
+                        break
+                    end 
                     select_restaurant_in_category
                     validate_restaurant_in_category
                     if @input == "exit"
@@ -77,7 +85,10 @@ class VenturaRestaurants::CLI
                 if @input == "all"
                     select_and_display_all_restaurants
                 elsif @input != "back"   
-                    input_to_index 
+                    input_to_index
+                    if @input == "exit"
+                        break
+                    end 
                     select_restaurant
                     validate_restaurant
                     if @input == "exit"
@@ -95,6 +106,7 @@ class VenturaRestaurants::CLI
             end
         end  
     end
+    
 
     def validate_genre_or_all
         while @input != "genre" && @input != "all" && @input != "exit"
@@ -142,6 +154,8 @@ class VenturaRestaurants::CLI
     end
 
     def validate_restaurant_in_category
+        #Here I validate if the number selected is in array.
+        #The default value of @restaurant is "nil" so if you select a number thats in the @restaurants_in_category array then @restaurant will change from "nil."
         while @restaurant == nil && @input != "exit"
             puts "#{GREEN}#{REVERSED}Sorry about that we couldnt find your restaurant could you type it in again for me?#{RESET}"
             get_user_input
@@ -163,6 +177,7 @@ class VenturaRestaurants::CLI
     end
 
     def validate_category
+        #Here I validate if the number selected is in array.
         while @input != "exit" && @categories[@input] == nil
             puts "#{GREEN}#{REVERSED}Sorry about that we couldnt find the category could you type it in again for me?#{RESET}"
             get_user_input
@@ -182,7 +197,14 @@ class VenturaRestaurants::CLI
     end
 
     def input_to_index
-        @input = @input.to_i - 1
+        #this is where I validate if the user input is an Integer.
+        while !(@input =~ /\d/) && !(@input =~ /\d\d/) && @input != "exit"                   
+              puts "#{GREEN}#{REVERSED}I'm sorry I didnt understand, I'm looking for a number.#{RESET}"
+              get_user_input
+        end
+        if @input != "exit"
+            @input = @input.to_i - 1 
+        end
     end
 
 
