@@ -24,11 +24,6 @@ class VenturaRestaurants::CLI
             puts "#{GREEN}#{REVERSED}Or type EXIT at ANY time to end the program#{RESET}"
             @restaurant = nil
             get_user_input
-            #this allows me to break from the loop if "exit" is typed. 
-            #I tried to put this into a method so that I didnt have to type it out each time but I got "Invalid break (SyntaxError)" every time.
-            if @input == "exit"
-                break
-            end
             validate_genre_or_all
             if @input == "exit"
                 break
@@ -40,67 +35,43 @@ class VenturaRestaurants::CLI
                 list_categories
                 puts "#{GREEN}#{REVERSED}Select the number of the Genre or type 'back'#{RESET}"
                 get_user_input
-                if @input == "exit"
-                    break
-                end
+                
                 if @input != "back"
                     input_to_index
-                    if @input == "exit"
-                        break
-                    end
                     select_category
                     validate_category
-                    if @input == "exit"
-                        break
-                    end
                     list_restaurants_in_category
                     puts "#{GREEN}#{REVERSED}Select the number of the Restaurant OR type 'all' OR type 'back' to go back to the top#{RESET}"
                     get_user_input
                 end
                 
-                if @input == "exit"
-                    break
-                end
+                
                 if @input == "all"
                     select_all_restaurants_in_category_and_display_details         
                 elsif @input != "back"
                     input_to_index
-                    if @input == "exit"
-                        break
-                    end 
                     select_restaurant_in_category
                     validate_restaurant_in_category
-                    if @input == "exit"
-                        break
-                    end
                     display_restaurant_details
                 end    
             when "all"
                 list_restaurants
                 puts "#{GREEN}#{REVERSED}Select the number of the Restaurant OR type 'all' OR type 'back' to go back to the top#{RESET}"
                 get_user_input
-                if @input == "exit"
-                    break
-                end
+                
                 if @input == "all"
                     select_and_display_all_restaurants
                 elsif @input != "back"   
                     input_to_index
-                    if @input == "exit"
-                        break
-                    end 
                     select_restaurant
-                    validate_restaurant
-                    if @input == "exit"
-                        break
-                    end
+                    validate_restaurant               
                     display_restaurant_details
                 end
             end
             if @input != "back"
                 puts "#{GREEN}#{REVERSED}Do you want to see another restaurant? Y/N #{RESET}"
                 get_user_input
-                if @input == "exit" || @input == "n"
+                if  @input == "n"
                     break
                 end
             end
@@ -194,6 +165,10 @@ class VenturaRestaurants::CLI
 
     def get_user_input
         @input = gets.strip.downcase
+    #This allows the user to end the program at anytime by typing 'exit.'
+        if @input == "exit"
+            abort
+        end
     end
 
     def input_to_index
